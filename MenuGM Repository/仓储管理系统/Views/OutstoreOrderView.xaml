@@ -1,0 +1,101 @@
+﻿<UserControl x:Class="仓储管理系统.Views.OutstoreOrderView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:vm="clr-namespace:仓储管理系统.ViewModels" 
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+             d:DataContext="{d:DesignInstance vm:OutstoreOrderViewModel}"                
+             mc:Ignorable="d" 
+             Background="{StaticResource BackgroundColor}"
+             FontSize="16" 
+             d:DesignHeight="600" d:DesignWidth="1300">
+    <!--入库管理-->
+    <i:Interaction.Triggers>
+        <!--事件触发;loaded转为命令,去绑定后端命令-->
+        <i:EventTrigger EventName="Loaded">
+            <i:InvokeCommandAction Command="{Binding LoadedCommand}"/>
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+    <Grid>
+        <!--状态栏-->
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition/>
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
+        <!--标题-->
+        <Border Grid.Row="0" Background="White" Height="50" CornerRadius="8" Margin="8">
+            <DockPanel>
+                <TextBlock DockPanel.Dock="Left" Text="出库管理" Margin="10 0 0 0" VerticalAlignment="Center"/>
+                <!--启动按钮,在MainWindow-->
+            </DockPanel>
+        </Border>
+        <!--子标题-->
+        <Border Grid.Row="1" Background="White" Height="50" CornerRadius="8" Margin="8">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="400"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0" Text="出库表" FontWeight="Bold" VerticalAlignment="Center"/>
+                <TextBlock Grid.Column="1" Text="出库详细" FontWeight="Bold" VerticalAlignment="Center"/>
+
+            </Grid>
+        </Border>
+        <!--查询,左右两部分-->
+        <Border Grid.Row="2">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="400"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <!--左区域,入库单内容-->
+                <ListView Grid.Column="0" ItemsSource="{Binding OutstoreOrders}" SelectedItem="{Binding OutstoreOrder}" Margin="10" d:ItemsSource="{d:SampleData ItemCount=5}">
+                    <i:Interaction.Triggers>
+                        <!--明确指定 EventName-->
+                        <i:EventTrigger EventName="SelectionChanged">
+                            <!--需要绑定到父级 ListView 的视图模型,而不是当前的db={Binding CommandName}-->
+                            <!--
+                                2.将CommandParameter绑定的当前数据项SelectedItem,传递到命令;
+                                1.绑定源,向上查找父元素,限定类型,获取DataContext的Command;
+                            -->
+                            <i:InvokeCommandAction Command="{Binding SelectionChangedCommand}"
+                                                   CommandParameter="{Binding OutstoreOrder}"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                    <ListView.View>
+                        <GridView>
+                            <GridView.Columns>
+                                <GridViewColumn Header="序号" DisplayMemberBinding="{Binding Id}" />
+                                <GridViewColumn Header="出库单号" DisplayMemberBinding="{Binding Name}"/>
+                            </GridView.Columns>
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+                <!--右区域,入库明细-->
+                <!--没有当前选中项-->
+                <ListView Grid.Column="1" ItemsSource="{Binding Outstores}"  Margin="10" d:ItemsSource="{d:SampleData ItemCount=5}">
+                    <ListView.View>
+                        <GridView>
+                            <GridView.Columns>
+                                <GridViewColumn Header="序号" DisplayMemberBinding="{Binding Id}" />
+                                <GridViewColumn Header="物资名称" DisplayMemberBinding="{Binding CargoName }"/>
+                                <GridViewColumn Header="库位名称" DisplayMemberBinding="{Binding LocationName }"/>
+                                <GridViewColumn Header="数量" DisplayMemberBinding="{Binding  Number}"/>
+                                <GridViewColumn Header="单价" DisplayMemberBinding="{Binding Price}"/>
+                                <GridViewColumn Header="备注" DisplayMemberBinding="{Binding Tag}"/>
+                                <GridViewColumn Header="日期" DisplayMemberBinding="{Binding InsertDate}"/>
+                            </GridView.Columns>
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+            </Grid>
+        </Border>
+        <!--统计或其他-->
+        <Border Grid.Row="3">
+
+        </Border>
+    </Grid>
+</UserControl>

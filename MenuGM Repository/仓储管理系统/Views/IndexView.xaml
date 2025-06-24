@@ -1,0 +1,51 @@
+﻿<UserControl x:Class="仓储管理系统.Views.IndexView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:仓储管理系统.Views"
+             xmlns:vm="clr-namespace:仓储管理系统.ViewModels" 
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors" 
+             xmlns:controls="clr-namespace:仓储管理系统.Controls"
+             d:DataContext="{d:DesignInstance vm:IndexViewModel}"                
+             mc:Ignorable="d" 
+             Background="{StaticResource BackgroundColor}"
+             FontSize="16" 
+             d:DesignHeight="600" d:DesignWidth="1300"> 
+    
+    <i:Interaction.Triggers>
+        <!--事件触发;loaded转为命令,去绑定后端命令-->
+        <i:EventTrigger EventName="Loaded">
+            <i:InvokeCommandAction Command="{Binding LoadedCommand}"/>
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto" />
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Text="欢迎使用仓储管理系统" FontSize="50" Margin="10"
+                   HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        <!--行2.卡片式_表统计-->
+        <WrapPanel Grid.Row="1">
+            <controls:Card CardTag="物资数量" CardContent="{Binding CargoCount}"/>
+            <controls:Card CardTag="物资数量" CardContent="{Binding CargoCount}"/>
+            <controls:Card CardTag="物资数量" CardContent="{Binding CargoCount}"/>
+            <controls:Card CardTag="物资数量" CardContent="{Binding CargoCount}"/>
+            <controls:Card CardTag="物资数量" CardContent="{Binding CargoCount}"/>
+            <controls:Card CardTag="物资数量" CardContent="{Binding CargoCount}"/>
+            <controls:Card CardTag="物资数量" CardContent="{Binding CargoCount}"/>
+
+            <!-- StackPool: 线性布局; WrapPanel: 自动换行 -->
+            <!--定义在样式中--> 
+                
+            
+
+        </WrapPanel>
+
+        <!--行3. -->
+
+    </Grid>
+</UserControl>

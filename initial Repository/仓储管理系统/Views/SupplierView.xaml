@@ -1,0 +1,106 @@
+﻿<UserControl x:Class="仓储管理系统.Views.SupplierView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:仓储管理系统.Views"
+             xmlns:vm="clr-namespace:仓储管理系统.ViewModels" 
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+                 d:DataContext="{d:DesignInstance vm:SupplierViewModel}"                
+             mc:Ignorable="d" 
+             Background="{StaticResource BackgroundColor}"
+             FontSize="16" 
+             d:DesignHeight="600" d:DesignWidth="1300">
+    <!--自xmlns:vm,所有内容作为部分类给到各子窗体前端-->
+    <i:Interaction.Triggers>
+        <!--事件触发;loaded转为命令,去绑定后端命令-->
+        <i:EventTrigger EventName="Loaded">
+            <i:InvokeCommandAction Command="{Binding LoadedCommand}"/>
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+    <Grid>
+        <Grid.RowDefinitions>
+            <!--状态栏-->
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition/>
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
+        <!--标题-->
+        <Border Grid.Row="0" Background="White" Height="50" CornerRadius="8" Margin="8">
+            <DockPanel>
+                <TextBlock DockPanel.Dock="Left" Text="供应商管理" Margin="10 0 0 0" VerticalAlignment="Center"/>
+                <Button  Content="新建" Margin="10 0 0 0" HorizontalAlignment="Right" VerticalAlignment="Center" Width="100"
+                         Command="{Binding CreateCommand}"/>
+                <!--绑定的是,修改-->
+                <!--启动按钮,在MainWindow-->
+            </DockPanel>
+        </Border>
+        <!--添加或修改,物资名字与Tag-->
+        <Border Grid.Row="1" Background="White" Height="50" CornerRadius="8" Margin="8">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock VerticalAlignment="Center" Margin="10 0 10 0" Text="{Binding Supplier.Id}"/>
+                <TextBlock VerticalAlignment="Center" Margin="0 0 10 0" Text="联系人:"/>
+                <TextBox VerticalAlignment="Center" Margin="0 0 10 0" Width="150" Height="25"
+                           Text="{Binding Supplier.Name,UpdateSourceTrigger=PropertyChanged}"/>
+                <TextBlock VerticalAlignment="Center" Margin="0 0 10 0" Text="供应商公司:"/>
+                <TextBox VerticalAlignment="Center" Margin="0 0 10 0" Width="150" Height="25"
+                        Text="{Binding Supplier.Company,UpdateSourceTrigger=PropertyChanged}"/>
+                <TextBlock VerticalAlignment="Center" Margin="0 0 10 0" Text="电话:"/>
+                <TextBox VerticalAlignment="Center" Margin="0 0 10 0" Width="150" Height="25"
+                        Text="{Binding Supplier.Telephone,UpdateSourceTrigger=PropertyChanged}"/>
+                <TextBlock VerticalAlignment="Center" Margin="0 0 10 0" Text="邮箱:"/>
+                <TextBox VerticalAlignment="Center" Margin="0 0 10 0" Width="150" Height="25"
+                        Text="{Binding Supplier.Email,UpdateSourceTrigger=PropertyChanged}"/>
+                <TextBlock VerticalAlignment="Center" Text="备注:"/>
+                <TextBox VerticalAlignment="Center" Width="150" Height="25"  
+                            Text="{Binding Supplier.Tag,UpdateSourceTrigger=PropertyChanged}"/>
+                <!--InsertDate 日期-->
+                <Button Content="保存" Margin="10 0 0 0" HorizontalAlignment="Right" VerticalAlignment="Center" Width="100"
+                        Command="{Binding AddOrUpdateCommand}"/>
+            </StackPanel>
+        </Border>
+        <!--查询-->
+        <Border Grid.Row="2">
+                <ListView ItemsSource="{Binding Suppliers}" SelectedItem="{Binding Supplier}" Margin="10">
+                <ListView.View>
+                    <GridView>
+                        <GridView.Columns>
+                            <GridViewColumn Header="序号" DisplayMemberBinding="{Binding Id}"/>
+                            <GridViewColumn Header="联系人" DisplayMemberBinding="{Binding Name}"/>
+                            <GridViewColumn Header="客户公司" DisplayMemberBinding="{Binding Company}"/>
+                            <GridViewColumn Header="电话" DisplayMemberBinding="{Binding Telephone}"/>
+                            <GridViewColumn Header="邮箱" DisplayMemberBinding="{Binding Email}"/>
+                            <GridViewColumn Header="备注" DisplayMemberBinding="{Binding Tag}"/>
+                            <GridViewColumn Header="日期" DisplayMemberBinding="{Binding InsertDate}"/>
+                            <GridViewColumn Header="操作">
+                                <!--模板 Template-->
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <!--new CargoRepository()-->
+                                        <Button Content="删除" 
+                                                Command="{Binding RelativeSource ={RelativeSource
+                                             Mode=FindAncestor,AncestorType=ListView},
+                                            Path=DataContext.DeleteCommand}" 
+                                            CommandParameter="{Binding RelativeSource={RelativeSource 
+                                            Mode=FindAncestor, AncestorType=ListView},Path=SelectedItem}"/>
+                                        <!--SelectedItem 当前选中项就是ListView控件绑定的Cargo-->
+                                        <!-- 写法2
+                                            Command="{Binding DataContext.DeleteCommand, 
+                                                    RelativeSource={RelativeSource AncestorType=ListView}}"
+                                            CommandParameter="{Binding}" />
+                                        -->
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                        </GridView.Columns>
+                    </GridView>
+                </ListView.View>
+            </ListView>
+        </Border>
+        <!--统计或其他-->
+        <Border Grid.Row="3">
+
+        </Border>
+    </Grid>
+</UserControl>
